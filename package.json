@@ -1,0 +1,14 @@
+{
+  "name": "amareat",
+  "version": "1.0.0",
+  "description": "This is backend of AMAREAT application",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "keywords": [
+    "backend"
+  ],
+  "author": "Carlos Alejandro Figueroa Bazán",
+  "license": "ISC"
+}
