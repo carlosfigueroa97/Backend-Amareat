@@ -9,5 +9,6 @@ module.exports = {
     DEV_USER: process.env.DEV_USER,
     DEV_PASS: process.env.DEV_PASS,
     SECRET_CRYPTO: process.env.SECRET_CRYPTO,
-    IV: process.env.IV
+    IV: process.env.IV,
+    ALGORITHM: process.env.ALGORITHM
 };
