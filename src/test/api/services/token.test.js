@@ -9,7 +9,6 @@ describe('Token functions', () => {
     });
 
     test('It should return a object and string abhsql19snjh23', () => {
-
         var response = functions.decodeToken(mock.sub);
 
         response.then((payload) => {
