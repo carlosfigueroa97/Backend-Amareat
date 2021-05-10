@@ -1,6 +1,5 @@
 const mock = require('../../mocks/request/hash');
 const functions = require('../../functions/hash');
-const { response } = require('express');
 
 describe('Hash functions', () => {
 

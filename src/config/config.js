@@ -1,5 +1,7 @@
 'use strict'
 
+require('dotenv').config();
+
 // Export .ENV variables
 module.exports = {
     PORT: process.env.PORT,
