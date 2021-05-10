@@ -5,19 +5,21 @@ const moment = require('moment');
 const config = require('../config/config');
 const { errors } = require('../helpers/strings');
 const { tokenService } = errors;
-const hashService = require('../services/hash');
+const cryptoService = require('../services/crypto');
 
 function createToken(obj){
-    var hashed = hashService.hash(obj);
+    var value = cryptoService.encrypt(obj);
 
-    if(hashed){
+    if(value){
         const payload = {
-            sub: hashed,
+            sub: value,
             iat: moment().unix(),
             exp: moment().add(6, 'months').unix()
         };
 
-        return payload;
+        const token = jwt.sign(payload, config.SECRET_TOKEN);
+        
+        return token;
     }
 
     return null;
@@ -28,8 +30,10 @@ function decodeToken(token){
         try {
             const payload = jwt.verify(token, config.SECRET_TOKEN);
 
+            var sub = cryptoService.decrypt(payload.sub);
+
             resolve({
-                sub: payload.sub,
+                sub: sub,
                 token: token
             });
         } catch (err) {
@@ -48,4 +52,9 @@ function decodeToken(token){
     });
 
     return decoded;
+}
+
+module.exports = {
+    createToken,
+    decodeToken
 }
