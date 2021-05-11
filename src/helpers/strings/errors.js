@@ -12,7 +12,8 @@ module.exports = {
     users: {
         invalidEmail: 'Invalid email',
         cannotSaveUser: 'Cannot save user',
-        userDoNotExists: 'Username does not exist'
+        userDoNotExists: 'Username does not exist',
+        fieldsCannotBeNull: 'The properties cannot be null'
     },
     auth: {
         youDoNotHaveAuthorization: 'You do not have authorization'

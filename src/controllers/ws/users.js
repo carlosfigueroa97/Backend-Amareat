@@ -128,7 +128,8 @@ async function refreshToken(req, res){
 
 async function signIn(req, res){
     try {
-        let select = ['_id', 'status', 'isAdmin', 'createdAt', 'username', 'password', 'email', 'tokens']
+        let select = ['_id', 'status', 'isAdmin', 'createdAt', 'username', 'password', 'email', 'tokens'];
+
         var body = req.body;
 
         var password = cryptoService.decrypt(body.password);
@@ -246,11 +247,56 @@ async function getUsers(req, res){
     }
 }
 
+async function getUser(req, res){
+    try {
+        let select = ['status', 'isAdmin', 'createdAt', '_id', 'username', 'email'];
+
+        if(!req.query._id && !req.query.username){
+            return res.status(400).send({
+                codeReason: strings.codes[400].reasonPhrase,
+                message: strings.errors.users.fieldsCannotBeNull
+            });
+        }
+
+        await Users.findOne({
+            $or: [{
+                '_id': req.query._id
+            },{
+                'username': req.query.username
+            }]
+        }, (err, done) => {
+            if(err){
+                return res.status(500).send({
+                    codeReason: strings.codes[500].reasonPhrase,
+                    message: err.message
+                });
+            }
+
+            if(!done){
+                return res.status(404).send({
+                    codeReason: strings.codes[400][404],
+                    message: strings.errors.users.userDoNotExists
+                });
+            }
+
+            res.status(200).send({
+                data: done
+            });
+        }).select(select);   
+    } catch (err) {
+        res.status(500).send({
+            codeReason: strings.codes[500].reasonPhrase,
+            message: err.message
+        });
+    }
+}
+
 module.exports = {
     saveUser,
     checkTokenInDB,
     refreshToken,
     signIn,
     logout,
-    getUsers
+    getUsers,
+    getUser
 };
