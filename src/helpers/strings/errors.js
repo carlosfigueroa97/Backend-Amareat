@@ -9,6 +9,7 @@ module.exports = {
         invalidStatus: 'Invalid status'
     },
     users: {
-        invalidEmail: 'Invalid email'
+        invalidEmail: 'Invalid email',
+        cannotSaveUser: 'Cannot save user'
     }
 }
