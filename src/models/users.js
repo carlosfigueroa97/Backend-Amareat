@@ -48,6 +48,22 @@ const usersSchema = new Schema({
     }]
 });
 
+usersSchema.methods.assignToken = function assignToken(token){
+    this.tokens = this.tokens.concat({
+        token
+    });
+
+    return true;
+}
+
+usersSchema.methods.deleteToken = function deleteToken(token){
+    this.tokens = this.tokens.filter((tokens) => {
+        return tokens.token !== token;
+    });
+
+    return true;
+}
+
 const users = mongoose.model('users', usersSchema);
 
 module.exports = users;
