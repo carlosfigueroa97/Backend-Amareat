@@ -190,9 +190,41 @@ async function signIn(req, res){
     }
 }
 
+async function logout(req, res){
+    try {
+        var user = req.user;
+
+        user.deleteToken(req.token);
+
+        await Users.updateOne({
+            '_id': user.id,
+            'status': '0'
+        },{
+            'tokens': user.tokens
+        }, (err, done) => {
+            if(err){
+                return res.status(500).send({
+                    codeReason: strings.codes[500].reasonPhrase,
+                    message: err.message
+                });
+            }
+
+            res.status(200).send({
+                message: strings.response.users.logoutSuccessfully
+            });
+        });
+    } catch (err) {
+        res.status(500).send({
+            codeReason: strings.codes[500].reasonPhrase,
+            message: err.message
+        });
+    }
+}
+
 module.exports = {
     saveUser,
     checkTokenInDB,
     refreshToken,
-    signIn
+    signIn,
+    logout
 };
