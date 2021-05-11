@@ -3,6 +3,7 @@
 module.exports = {
     users: {
         savedUser: 'User saved successfully',
-        logoutSuccessfully: 'Logout successfully'
+        logoutSuccessfully: 'Logout successfully',
+        dataModified: 'Data modified successfully'
     }
 };

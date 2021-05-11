@@ -10,6 +10,7 @@ const config = require('../../config/config');
 
 async function checkTokenInDB(id, token){
     var user = await Users.findOne({
+        '_id': id,
         'status': '0',
         'tokens.token': token
     });
@@ -79,8 +80,10 @@ async function refreshToken(req, res){
         const oldToken = req.headers.authorization.split(' ')[1];
     
         const payload = jwt.decode(oldToken, config.SECRET_TOKEN);
+
+        var id = cryptoService.decrypt(payload.sub);
     
-        var user = await checkTokenInDB(payload.sub, oldToken);
+        var user = await checkTokenInDB(id, oldToken);
     
         if(!user){
             return res.status(401).send({
@@ -111,6 +114,13 @@ async function refreshToken(req, res){
                 return res.status(500).send({
                     codeReason: strings.codes[500].reasonPhrase,
                     message: err.message
+                });
+            }
+
+            if(!done){
+                return res.status(404).send({
+                    codeReason: strings.codes[400][404],
+                    message: strings.errors.users.userDoNotExists
                 });
             }
     
@@ -179,6 +189,13 @@ async function signIn(req, res){
                 });
             }
 
+            if(!done){
+                return res.status(404).send({
+                    codeReason: strings.codes[400][404],
+                    message: strings.errors.users.userDoNotExists
+                });
+            }
+
             res.status(200).send({
                 token: token
             });
@@ -207,6 +224,13 @@ async function logout(req, res){
                 return res.status(500).send({
                     codeReason: strings.codes[500].reasonPhrase,
                     message: err.message
+                });
+            }
+
+            if(!done){
+                return res.status(404).send({
+                    codeReason: strings.codes[400][404],
+                    message: strings.errors.users.userDoNotExists
                 });
             }
 
@@ -291,6 +315,41 @@ async function getUser(req, res){
     }
 }
 
+async function editUser(req, res){
+    try {
+        var body = req.body;
+
+        await Users.updateOne({
+            '_id': body._id
+        },
+        body,
+        (err, done) => {
+            if(err){
+                return res.status(500).send({
+                    codeReason: strings.codes[500].reasonPhrase,
+                    message: err.message
+                });                
+            }
+
+            if(done.nModified == 0){
+                return res.status(404).send({
+                    codeReason: strings.codes[400].reasonPhrase,
+                    message: strings.errors.users.dataNotModified
+                });
+            }
+
+            res.status(200).send({
+                message: strings.response.users.dataModified
+            });
+        });
+    } catch (err) {
+        res.status(500).send({
+            codeReason: strings.codes[500].reasonPhrase,
+            message: err.message
+        });
+    }
+}
+
 module.exports = {
     saveUser,
     checkTokenInDB,
@@ -298,5 +357,6 @@ module.exports = {
     signIn,
     logout,
     getUsers,
-    getUser
+    getUser,
+    editUser
 };

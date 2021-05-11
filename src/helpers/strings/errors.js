@@ -13,7 +13,8 @@ module.exports = {
         invalidEmail: 'Invalid email',
         cannotSaveUser: 'Cannot save user',
         userDoNotExists: 'Username does not exist',
-        fieldsCannotBeNull: 'The properties cannot be null'
+        fieldsCannotBeNull: 'The properties cannot be null',
+        dataNotModified: 'Data not modified'
     },
     auth: {
         youDoNotHaveAuthorization: 'You do not have authorization'

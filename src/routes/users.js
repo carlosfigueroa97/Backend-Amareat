@@ -13,5 +13,6 @@ router.post('/signIn', ctrl.signIn);
 router.post('/logout', auth.isAuth, ctrl.logout);
 
 router.put('/refreshToken', ctrl.refreshToken);
+router.put('/editUser', auth.isAuth, auth.isAdmin, ctrl.editUser);
 
 module.exports = router;
