@@ -6,6 +6,8 @@ const auth = require('../middlewares/auth');
 const router = express.Router();
 
 router.post('/saveUser', auth.isAuth, auth.isAdmin, ctrl.saveUser);
+router.post('/signIn', ctrl.signIn);
+
 router.put('/refreshToken', ctrl.refreshToken);
 
 module.exports = router;

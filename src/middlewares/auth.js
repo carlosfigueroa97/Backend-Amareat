@@ -41,14 +41,14 @@ function isAuth(req, res, next){
 }
 
 function isAdmin(req, res, next){
-    if(req.user.isAdmin){
-        next();
+    if(!req.user.isAdmin){
+        return res.status(401).send({
+            codeReason: strings.codes[400][401],
+            message: strings.errors.auth.youDoNotHaveAuthorization
+        });
     }
 
-    res.status(401).send({
-        codeReason: strings.codes[400][401],
-        message: strings.errors.auth.youDoNotHaveAuthorization
-    });
+    next();
 }
 
 module.exports = {
