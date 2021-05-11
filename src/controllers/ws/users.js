@@ -5,6 +5,24 @@ const strings = require('../../helpers/strings');
 const cryptoService = require('../../services/crypto');
 const hashService = require('../../services/hash');
 
+async function checkTokenInDB(id, token){
+    var user = await Users.findOne({
+        'tokens.token': token
+    });
+
+    if(!user){
+        return null;
+    }
+
+    var isValid = hashService.compareHash(id, user.id);
+
+    if(!isValid){
+        return null;
+    }
+
+    return user;
+};
+
 async function saveUser(req, res){
     try {
         var body = req.body;
@@ -52,5 +70,6 @@ async function saveUser(req, res){
 }
 
 module.exports = {
-    saveUser
+    saveUser,
+    checkTokenInDB
 };

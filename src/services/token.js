@@ -39,7 +39,7 @@ function decodeToken(token){
         } catch (err) {
             if(err.message == 'jwt expired'){
                 reject({
-                    status: 401,
+                    statusCode: 401,
                     message: tokenService.tokenExpired
                 })
             }else{
