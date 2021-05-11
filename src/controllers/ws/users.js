@@ -221,10 +221,36 @@ async function logout(req, res){
     }
 }
 
+async function getUsers(req, res){
+    try {
+        let select = ['status', 'isAdmin', 'createdAt', '_id', 'username', 'email'];
+
+        await Users.find({}, 
+        (err, done) => {
+            if(err){
+                return res.status(500).send({
+                    codeReason: strings.codes[500].reasonPhrase,
+                    message: err.message
+                });
+            }
+
+            res.status(200).send({
+                data: done
+            })
+        }).select(select);
+    } catch (err) {
+        res.status(500).send({
+            codeReason: strings.codes[500].reasonPhrase,
+            message: err.message
+        });
+    }
+}
+
 module.exports = {
     saveUser,
     checkTokenInDB,
     refreshToken,
     signIn,
-    logout
+    logout,
+    getUsers
 };
