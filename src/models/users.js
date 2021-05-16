@@ -10,7 +10,8 @@ const { users: userString } = errors;
 const usersSchema = new Schema({
     username: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,
@@ -22,6 +23,7 @@ const usersSchema = new Schema({
     email: {
         type: String,
         required: true,
+        unique: true,
         validate(value){
             if(!validator.isEmail(value)){
                 throw new Error(userString.invalidEmail);
@@ -31,7 +33,7 @@ const usersSchema = new Schema({
     status,
     isAdmin: {
         type: Boolean,
-        required: true
+        default: false
     },
     createdAt: {
         type: Date,
@@ -45,6 +47,22 @@ const usersSchema = new Schema({
         }
     }]
 });
+
+usersSchema.methods.assignToken = function assignToken(token){
+    this.tokens = this.tokens.concat({
+        token
+    });
+
+    return true;
+}
+
+usersSchema.methods.deleteToken = function deleteToken(token){
+    this.tokens = this.tokens.filter((tokens) => {
+        return tokens.token !== token;
+    });
+
+    return true;
+}
 
 const users = mongoose.model('users', usersSchema);
 
