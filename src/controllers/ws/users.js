@@ -331,8 +331,9 @@ async function editUser(req, res){
                 });                
             }
 
-            if(done.nModified == 0){
-                return res.status(404).send({
+            // TODO: Check this condition
+            if(done.n == 0){
+                return res.status(400).send({
                     codeReason: strings.codes[400].reasonPhrase,
                     message: strings.errors.users.dataNotModified
                 });

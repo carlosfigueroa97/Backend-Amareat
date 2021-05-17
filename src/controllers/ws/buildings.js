@@ -129,8 +129,44 @@ async function getBuilding(req, res){
     }
 }
 
+async function editBuilding(req, res){
+    try {
+        var body = req.body
+
+        await Buildings.updateOne({
+            '_id': body._id
+        },
+        body,
+        (err, done) => {
+            if(err){
+                return res.status(500).send({
+                    codeReason: strings.codes[500].reasonPhrase,
+                    message: err.message
+                });
+            }
+
+            if(done.n == 0){
+                return res.status(400).send({
+                    codeReason: strings.codes[400].reasonPhrase,
+                    message: strings.errors.buildings.dataNotModified
+                });
+            }
+
+            res.status(200).send({
+                message: strings.response.buildings.dataModified
+            });
+        });
+    } catch (err) {
+        res.status(500).send({
+            codeReason: strings.codes[500].reasonPhrase,
+            message: err.message
+        });
+    }
+}
+
 module.exports = {
     saveBuilding,
     getBuildings,
-    getBuilding
+    getBuilding,
+    editBuilding
 }

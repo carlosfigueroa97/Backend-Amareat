@@ -21,6 +21,7 @@ module.exports = {
     },
     buildings: {
         noDataFound:  'No data found',
-        fieldsCannotBeNull: 'The properties cannot be null'
+        fieldsCannotBeNull: 'The properties cannot be null',
+        dataNotModified: 'Data not modified'
     }
 }
