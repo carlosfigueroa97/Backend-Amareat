@@ -20,6 +20,7 @@ module.exports = {
         youDoNotHaveAuthorization: 'You do not have authorization'
     },
     buildings: {
-        noDataFound:  'No data found'
+        noDataFound:  'No data found',
+        fieldsCannotBeNull: 'The properties cannot be null'
     }
 }
