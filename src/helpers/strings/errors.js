@@ -18,5 +18,10 @@ module.exports = {
     },
     auth: {
         youDoNotHaveAuthorization: 'You do not have authorization'
+    },
+    buildings: {
+        noDataFound:  'No data found',
+        fieldsCannotBeNull: 'The properties cannot be null',
+        dataNotModified: 'Data not modified'
     }
 }

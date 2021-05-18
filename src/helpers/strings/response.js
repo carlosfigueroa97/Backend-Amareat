@@ -5,5 +5,9 @@ module.exports = {
         savedUser: 'User saved successfully',
         logoutSuccessfully: 'Logout successfully',
         dataModified: 'Data modified successfully'
+    },
+    buildings: {
+        dataSaved: 'Data saved successfully',
+        dataModified: 'Data modified successfully'
     }
 };
