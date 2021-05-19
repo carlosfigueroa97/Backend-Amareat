@@ -119,8 +119,44 @@ async function getDevice(req, res){
     }
 }
 
+async function editDevice(req, res){
+    try {
+        var body = req.body;
+
+        await Devices.updateOne({
+            '_id': body._id
+        },
+        body,
+        (err, done) => {
+            if(err){
+                return res.status(500).send({
+                    codeReason: strings.codes[500].reasonPhrase,
+                    message: err.message
+                });
+            }
+
+            if(done.n == 0){
+                return res.status(400).send({
+                    codeReason: strings.codes[400].reasonPhrase,
+                    message: strings.errors.devices.dataNotModified
+                });
+            }
+
+            res.status(200).send({
+                message: strings.response.devices.dataModified
+            });
+        });
+    } catch (err) {
+        res.status(500).send({
+            codeReason: strings.codes[500].reasonPhrase,
+            message: err.message
+        });
+    }
+}
+
 module.exports = {
     getDevices,
     saveDevice,
-    getDevice
+    getDevice,
+    editDevice
 }

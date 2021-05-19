@@ -10,4 +10,6 @@ router.get('/getDevice', auth.isAuth, ctrl.getDevice);
 
 router.post('/saveDevice', auth.isAuth, auth.isAdmin, ctrl.saveDevice);
 
+router.put('/editDevice', auth.isAuth, auth.isAdmin, ctrl.editDevice);
+
 module.exports = router;
