@@ -5,6 +5,8 @@ const strings = require('../../helpers/strings');
 
 async function getDevices(req, res){
     try {
+        let populateFields = ['idTypeDevice'];
+
         var status = req.query.status;
 
         if(!status){
@@ -35,7 +37,7 @@ async function getDevices(req, res){
             res.status(200).send({
                 data: done
             });
-        });
+        }).populate(populateFields);
     } catch (err) {
         res.status(500).send({
             codeReason: strings.codes[500].reasonPhrase,
