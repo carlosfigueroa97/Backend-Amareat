@@ -26,6 +26,7 @@ module.exports = {
     },
     rooms: {
         fieldsCannotBeNull: 'The properties cannot be null',
-        noDataFound:  'No data found'
+        noDataFound:  'No data found',
+        dataNotModified: 'Data not modified'
     }
 }

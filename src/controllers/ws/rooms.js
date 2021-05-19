@@ -116,8 +116,44 @@ async function getRooms(req, res){
     }
 }
 
+async function editRooms(req, res){
+    try {
+        var body = req.body;
+
+        await Rooms.updateOne({
+            '_id': body._id
+        },
+        body,
+        (err, done) => {
+            if(err){
+                return res.status(500).send({
+                    codeReason: strings.codes[500].reasonPhrase,
+                    message: err.message
+                });
+            }
+
+            if(done.n == 0){
+                return res.status(400).send({
+                    codeReason: strings.codes[400].reasonPhrase,
+                    message: strings.errors.rooms.dataNotModified
+                });
+            }
+
+            res.status(200).send({
+                message: strings.response.rooms.dataModified
+            });
+        });
+    } catch (err) {
+        res.status(500).send({
+            codeReason: strings.codes[500].reasonPhrase,
+            message: err.message
+        });
+    }
+}
+
 module.exports = {
     saveRoom,
     getRoom,
-    getRooms
+    getRooms,
+    editRooms
 }

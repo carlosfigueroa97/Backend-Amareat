@@ -10,4 +10,6 @@ router.get('/getRooms', auth.isAuth, ctrl.getRooms);
 
 router.post('/saveRoom', auth.isAuth, auth.isAdmin, ctrl.saveRoom);
 
+router.put('/editRoom', auth.isAuth, auth.isAdmin, ctrl.editRooms);
+
 module.exports = router;
