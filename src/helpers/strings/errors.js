@@ -23,5 +23,9 @@ module.exports = {
         noDataFound:  'No data found',
         fieldsCannotBeNull: 'The properties cannot be null',
         dataNotModified: 'Data not modified'
+    },
+    rooms: {
+        fieldsCannotBeNull: 'The properties cannot be null',
+        noDataFound:  'No data found'
     }
 }

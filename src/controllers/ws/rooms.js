@@ -29,6 +29,54 @@ async function saveRoom(req, res){
     }
 }
 
+async function getRoom(req, res){
+    try {
+
+        var id = req.query._id;
+        var name = req.query.name;
+
+        if(!id && !name){
+            return res.status(400).send({
+                codeReason: strings.codes[400].reasonPhrase,
+                message: strings.errors.rooms.fieldsCannotBeNull
+            })
+        }
+
+        await Rooms.findOne({
+            $or: [{
+                '_id': id
+            },{
+                'name': name
+            }]
+        },
+        (err, done) => {
+            if(err){
+                return res.status(500).send({
+                    codeReason: strings.codes[500].reasonPhrase,
+                    message: err.message
+                });
+            }
+
+            if(!done){
+                return res.status(500).send({
+                    codeReason: strings.codes[400][404],
+                    message: strings.errors.rooms.noDataFound
+                });
+            }
+
+            res.status(200).send({
+                data: done
+            });
+        });
+    } catch (err) {
+        res.status(500).send({
+            codeReason: strings.codes[500].reasonPhrase,
+            message: err.message
+        });
+    }
+}
+
 module.exports = {
-    saveRoom
+    saveRoom,
+    getRoom
 }
