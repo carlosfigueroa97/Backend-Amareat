@@ -28,5 +28,14 @@ module.exports = {
         fieldsCannotBeNull: 'The properties cannot be null',
         noDataFound:  'No data found',
         dataNotModified: 'Data not modified'
+    },
+    devices: {
+        fieldsCannotBeNull: 'The properties cannot be null',
+        noDataFound:  'No data found',
+        dataNotModified: 'Data not modified'
+    },
+    typeDevices: {
+        fieldsCannotBeNull: 'The properties cannot be null',
+        noDataFound:  'No data found',
     }
 }

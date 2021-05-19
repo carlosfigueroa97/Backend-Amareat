@@ -13,5 +13,12 @@ module.exports = {
     rooms: {
         dataSaved: 'Data saved successfully',
         dataModified: 'Data modified successfully'
+    },
+    devices: {
+        dataSaved: 'Data saved successfully',
+        dataModified: 'Data modified successfully'
+    },
+    typeDevices: {
+        dataSaved: 'Data saved successfully'
     }
 };
