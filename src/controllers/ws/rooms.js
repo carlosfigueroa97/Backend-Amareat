@@ -76,7 +76,48 @@ async function getRoom(req, res){
     }
 }
 
+async function getRooms(req, res){
+    try {
+        var status = req.query.status;
+
+        if(!status){
+            return res.status(400).send({
+                codeReason: strings.codes[400].reasonPhrase,
+                message: strings.errors.rooms.fieldsCannotBeNull
+            })
+        }
+
+        await Rooms.find({
+            'status': status
+        }, (err, done) => {
+            if(err){
+                return res.status(500).send({
+                    codeReason: strings.codes[500].reasonPhrase,
+                    message: err.message
+                });        
+            }
+
+            if(done.length === 0){
+                return res.status(404).send({
+                    codeReason: strings.codes[400][404],
+                    message: strings.errors.rooms.noDataFound
+                });
+            }
+
+            res.status(200).send({
+                data: done
+            });
+        });
+    } catch (err) {
+        res.status(500).send({
+            codeReason: strings.codes[500].reasonPhrase,
+            message: err.message
+        });
+    }
+}
+
 module.exports = {
     saveRoom,
-    getRoom
+    getRoom,
+    getRooms
 }

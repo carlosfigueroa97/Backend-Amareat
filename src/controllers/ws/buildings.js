@@ -54,8 +54,17 @@ async function saveBuilding(req, res){
 
 async function getBuildings(req, res){
     try {
+        var status = req.query.status;
+
+        if(!status){
+            return res.status(400).send({
+                codeReason: strings.codes[400].reasonPhrase,
+                message: strings.errors.buildings.fieldsCannotBeNull
+            })
+        }
+
         await Buildings.find({
-            'status': '0'
+            'status': status
         }, (err, done) => {
             if(err){
                 return res.status(500).send({
