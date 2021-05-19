@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Buildings = require('./buildings');
 const Rooms = require('./rooms');
+const TypeDevices = require('./typeDevices');
 const { status } = require('../helpers/properties');
 
 const devicesSchema = new Schema({
@@ -17,8 +18,9 @@ const devicesSchema = new Schema({
         ref: Rooms,
         required: true
     },
-    image: {
-        type: String,
+    idTypeDevice: {
+        type: Schema.ObjectId,
+        ref: TypeDevices,
         required: true
     },
     name: {
