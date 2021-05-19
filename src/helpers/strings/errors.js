@@ -37,5 +37,8 @@ module.exports = {
     typeDevices: {
         fieldsCannotBeNull: 'The properties cannot be null',
         noDataFound:  'No data found',
+    },
+    history: {
+        noDataFound: 'No data found'
     }
 }

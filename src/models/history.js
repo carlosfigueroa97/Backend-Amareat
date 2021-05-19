@@ -7,7 +7,7 @@ const Rooms = require('./rooms');
 const Devices = require('./devices');
 const Users = require('./users');
 
-const devicesSchema = new Schema({
+const historySchema = new Schema({
     idUser: {
         type: Schema.ObjectId,
         ref: Users,
@@ -39,6 +39,6 @@ const devicesSchema = new Schema({
     }
 });
 
-const devices = mongoose.model('devices', devicesSchema);
+const history = mongoose.model('history', historySchema);
 
-module.exports = devices;
+module.exports = history;

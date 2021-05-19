@@ -20,5 +20,8 @@ module.exports = {
     },
     typeDevices: {
         dataSaved: 'Data saved successfully'
+    },
+    history: {
+        dataSaved: 'Data saved successfully'
     }
 };

@@ -10,6 +10,7 @@ function initWS(app){
     app.use(api.apiV1 + 'rooms', require('../routes/rooms'));
     app.use(api.apiV1 + 'devices', require('../routes/devices'));
     app.use(api.apiV1 + 'typeDevices', require('../routes/typeDevices'));
+    app.use(api.apiV1 + 'history', require('../routes/history'));
 }
 
 module.exports = {
