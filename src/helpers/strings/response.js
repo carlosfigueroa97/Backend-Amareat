@@ -9,5 +9,9 @@ module.exports = {
     buildings: {
         dataSaved: 'Data saved successfully',
         dataModified: 'Data modified successfully'
+    },
+    rooms: {
+        dataSaved: 'Data saved successfully',
+        dataModified: 'Data modified successfully'
     }
 };

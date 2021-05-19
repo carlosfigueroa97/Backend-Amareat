@@ -1,87 +1,24 @@
 'use strict'
 
-const Buildings = require('../../models/buildings');
 const Rooms = require('../../models/rooms');
 const strings = require('../../helpers/strings');
 
-async function saveBuilding(req, res){
+async function saveRoom(req, res){
     try {
         var body = req.body;
 
-        let buildings = new Buildings(body);
+        let rooms = new Rooms(body);
 
-        await buildings.save(async (err, done) => {
+        await rooms.save((err) => {
             if(err){
                 return res.status(500).send({
                     codeReason: strings.codes[500].reasonPhrase,
                     message: err.message
-                });
-            }
-
-            if(body.rooms && body.rooms.length > 0){
-                var roomsModel = body.rooms.map(element => {
-                    return {
-                        'idBuilding': done.id,
-                        'name': element.name
-                    }
-                });
-
-                await Rooms.create(roomsModel, (err) => {
-                    if(err){
-                        return res.status(500).send({
-                            codeReason: strings.codes[500].reasonPhrase,
-                            message: err.message
-                        });
-                    }
-
-                    res.status(200).send({
-                        message: strings.response.buildings.dataSaved
-                    });
-                });
-            }else{
-                res.status(200).send({
-                    message: strings.response.buildings.dataSaved
-                });
-            }
-        });
-    } catch (err) {
-        res.status(500).send({
-            codeReason: strings.codes[500].reasonPhrase,
-            message: err.message
-        });
-    }
-}
-
-async function getBuildings(req, res){
-    try {
-        var status = req.query.status;
-
-        if(!status){
-            return res.status(400).send({
-                codeReason: strings.codes[400].reasonPhrase,
-                message: strings.errors.buildings.fieldsCannotBeNull
-            })
-        }
-
-        await Buildings.find({
-            'status': status
-        }, (err, done) => {
-            if(err){
-                return res.status(500).send({
-                    codeReason: strings.codes[500].reasonPhrase,
-                    message: err.message
-                });
-            }
-
-            if(done.length === 0){
-                return res.status(404).send({
-                    codeReason: strings.codes[400][404],
-                    message: strings.errors.buildings.noDataFound
                 });
             }
 
             res.status(200).send({
-                data: done
+                message: strings.response.rooms.dataSaved
             });
         });
     } catch (err) {
@@ -92,19 +29,20 @@ async function getBuildings(req, res){
     }
 }
 
-async function getBuilding(req, res){
+async function getRoom(req, res){
     try {
+
         var id = req.query._id;
         var name = req.query.name;
 
         if(!id && !name){
             return res.status(400).send({
                 codeReason: strings.codes[400].reasonPhrase,
-                message: strings.errors.buildings.fieldsCannotBeNull
+                message: strings.errors.rooms.fieldsCannotBeNull
             })
         }
 
-        await Buildings.findOne({
+        await Rooms.findOne({
             $or: [{
                 '_id': id
             },{
@@ -122,7 +60,7 @@ async function getBuilding(req, res){
             if(!done){
                 return res.status(500).send({
                     codeReason: strings.codes[400][404],
-                    message: strings.errors.buildings.noDataFound
+                    message: strings.errors.rooms.noDataFound
                 });
             }
 
@@ -138,11 +76,51 @@ async function getBuilding(req, res){
     }
 }
 
-async function editBuilding(req, res){
+async function getRooms(req, res){
     try {
-        var body = req.body
+        var status = req.query.status;
 
-        await Buildings.updateOne({
+        if(!status){
+            return res.status(400).send({
+                codeReason: strings.codes[400].reasonPhrase,
+                message: strings.errors.rooms.fieldsCannotBeNull
+            })
+        }
+
+        await Rooms.find({
+            'status': status
+        }, (err, done) => {
+            if(err){
+                return res.status(500).send({
+                    codeReason: strings.codes[500].reasonPhrase,
+                    message: err.message
+                });        
+            }
+
+            if(done.length === 0){
+                return res.status(404).send({
+                    codeReason: strings.codes[400][404],
+                    message: strings.errors.rooms.noDataFound
+                });
+            }
+
+            res.status(200).send({
+                data: done
+            });
+        });
+    } catch (err) {
+        res.status(500).send({
+            codeReason: strings.codes[500].reasonPhrase,
+            message: err.message
+        });
+    }
+}
+
+async function editRooms(req, res){
+    try {
+        var body = req.body;
+
+        await Rooms.updateOne({
             '_id': body._id
         },
         body,
@@ -157,12 +135,12 @@ async function editBuilding(req, res){
             if(done.n == 0){
                 return res.status(400).send({
                     codeReason: strings.codes[400].reasonPhrase,
-                    message: strings.errors.buildings.dataNotModified
+                    message: strings.errors.rooms.dataNotModified
                 });
             }
 
             res.status(200).send({
-                message: strings.response.buildings.dataModified
+                message: strings.response.rooms.dataModified
             });
         });
     } catch (err) {
@@ -174,8 +152,8 @@ async function editBuilding(req, res){
 }
 
 module.exports = {
-    saveBuilding,
-    getBuildings,
-    getBuilding,
-    editBuilding
+    saveRoom,
+    getRoom,
+    getRooms,
+    editRooms
 }
