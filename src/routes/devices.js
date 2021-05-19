@@ -7,4 +7,6 @@ const router = express.Router();
 
 router.get('/getDevices', auth.isAuth, ctrl.getDevices);
 
+router.post('/saveDevice', auth.isAuth, auth.isAdmin, ctrl.saveDevice);
+
 module.exports = router;

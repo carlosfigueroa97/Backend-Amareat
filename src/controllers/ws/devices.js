@@ -44,6 +44,33 @@ async function getDevices(req, res){
     }
 }
 
+async function saveDevice(req, res){
+    try {
+        var body = req.body;
+
+        let devices = new Devices(body);
+
+        await devices.save((err) => {
+            if(err){
+                return res.status(500).send({
+                    codeReason: strings.codes[500].reasonPhrase,
+                    message: err.message
+                });
+            }
+
+            res.status(200).send({
+                message: strings.response.devices.dataSaved
+            });
+        });
+    } catch (err) {
+        res.status(500).send({
+            codeReason: strings.codes[500].reasonPhrase,
+            message: err.message
+        });
+    }
+}
+
 module.exports = {
-    getDevices
+    getDevices,
+    saveDevice
 }
