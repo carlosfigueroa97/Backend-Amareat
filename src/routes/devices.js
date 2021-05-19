@@ -6,6 +6,7 @@ const auth = require('../middlewares/auth');
 const router = express.Router();
 
 router.get('/getDevices', auth.isAuth, ctrl.getDevices);
+router.get('/getDevice', auth.isAuth, ctrl.getDevice);
 
 router.post('/saveDevice', auth.isAuth, auth.isAdmin, ctrl.saveDevice);
 

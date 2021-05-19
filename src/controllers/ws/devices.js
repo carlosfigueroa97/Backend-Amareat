@@ -72,7 +72,55 @@ async function saveDevice(req, res){
     }
 }
 
+async function getDevice(req, res){
+    try {
+        let populateFields = ['idTypeDevice'];
+
+        var id = req.query._id;
+        var name = req.query.name;
+
+        if(!id && !name){
+            return res.status(400).send({
+                codeReason: strings.codes[400].reasonPhrase,
+                message: strings.errors.devices.fieldsCannotBeNull
+            })
+        }
+
+        await Devices.findOne({
+            $or: [{
+                '_id': id
+            },{
+                'name': name
+            }]
+        }, (err, done) => {
+            if(err){
+                return res.status(500).send({
+                    codeReason: strings.codes[500].reasonPhrase,
+                    message: err.message
+                });
+            }
+
+            if(!done){
+                return res.status(500).send({
+                    codeReason: strings.codes[400][404],
+                    message: strings.errors.devices.noDataFound
+                });
+            }
+
+            res.status(200).send({
+                data: done
+            });
+        }).populate(populateFields);
+    } catch (err) {
+        res.status(500).send({
+            codeReason: strings.codes[500].reasonPhrase,
+            message: err.message
+        });
+    }
+}
+
 module.exports = {
     getDevices,
-    saveDevice
+    saveDevice,
+    getDevice
 }
