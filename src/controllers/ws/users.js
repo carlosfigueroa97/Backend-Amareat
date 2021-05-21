@@ -351,6 +351,62 @@ async function editUser(req, res){
     }
 }
 
+async function searchUser(req, res){
+    try {
+        var searchValue = req.query.searchValue;
+
+        let select = ['status', 'isAdmin', 'createdAt', '_id', 'username', 'email'];
+
+        if(!searchValue){
+            return res.status(400).send({
+                codeReason: strings.codes[400].reasonPhrase,
+                message: strings.errors.users.fieldsCannotBeNull
+            });
+        }
+
+        await Users.find({
+            $or: [
+                {
+                    'username': {
+                        $regex: searchValue,
+                        $options: 'i'
+                    }
+                },
+                {
+                    'email': {
+                        $regex: searchValue,
+                        $options: 'i'
+                    }
+                }
+            ]
+        },
+        (err, done) => {
+            if(err){
+                return res.status(500).send({
+                    codeReason: strings.codes[500].reasonPhrase,
+                    message: err.message
+                });
+            }
+
+            if(done.length === 0){
+                return res.status(400).send({
+                    codeReason: strings.codes[400].reasonPhrase,
+                    message: strings.errors.users.userDoNotExists
+                });
+            }
+
+            res.status(200).send({
+                data: done
+            });
+        }).select(select);
+    } catch (err) {
+        res.status(500).send({
+            codeReason: strings.codes[500].reasonPhrase,
+            message: err.message
+        });
+    } 
+}
+
 module.exports = {
     saveUser,
     checkTokenInDB,
@@ -359,5 +415,6 @@ module.exports = {
     logout,
     getUsers,
     getUser,
-    editUser
+    editUser,
+    searchUser
 };
