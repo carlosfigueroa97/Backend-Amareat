@@ -173,9 +173,59 @@ async function editBuilding(req, res){
     }
 }
 
+async function searchBuildings(req, res){
+    try {
+        var searchValue = req.query.searchValue;
+
+        if(!searchValue){
+            return res.status(400).send({
+                codeReason: strings.codes[400].reasonPhrase,
+                message: strings.errors.buildings.fieldsCannotBeNull
+            });
+        }
+
+        await Buildings.find({
+            $or: [
+                {
+                    'name': {
+                        $regex: searchValue,
+                        $options: 'i'
+                    }
+                }
+            ]
+        },
+        (err, done) => {
+            if(err){
+                return res.status(500).send({
+                    codeReason: strings.codes[500].reasonPhrase,
+                    message: err.message
+                });
+            }
+
+            if(done.length === 0){
+                return res.status(400).send({
+                    codeReason: strings.codes[400].reasonPhrase,
+                    message: strings.errors.buildings.noDataFound
+                });
+            }
+
+            res.status(200).send({
+                data: done
+            });
+        });
+
+    } catch (err) {
+        res.status(500).send({
+            codeReason: strings.codes[500].reasonPhrase,
+            message: err.message
+        });
+    }
+}
+
 module.exports = {
     saveBuilding,
     getBuildings,
     getBuilding,
-    editBuilding
+    editBuilding,
+    searchBuildings
 }
