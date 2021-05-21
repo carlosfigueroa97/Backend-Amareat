@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get('/getBuildings', auth.isAuth, ctrl.getBuildings);
 router.get('/getBuilding', auth.isAuth, ctrl.getBuilding);
+router.get('/searchBuilding', auth.isAuth, auth.isAdmin, ctrl.searchBuildings);
 
 router.post('/saveBuilding', auth.isAuth, auth.isAdmin, ctrl.saveBuilding);
 
