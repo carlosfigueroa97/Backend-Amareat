@@ -1,6 +1,7 @@
 'use strict'
 
 const Devices = require('../../models/devices');
+const Rooms = require('../../models/rooms');
 const strings = require('../../helpers/strings');
 
 async function getDevices(req, res){
@@ -49,6 +50,7 @@ async function getDevices(req, res){
 async function getDevicesByBuilding(req, res){
     try {
         let populateFields = ['idTypeDevice', 'idRoom'];
+        let roomList = [];
 
         var status = req.query.status;
         var idBuilding = req.query.idBuilding;
@@ -60,29 +62,79 @@ async function getDevicesByBuilding(req, res){
             })
         }
 
-        await Devices.find({
+        var rooms = await Rooms.find({
             'status': status,
             'idBuilding': idBuilding
-        },
-        (err, done) => {
-            if(err){
-                return res.status(500).send({
-                    codeReason: strings.codes[500].reasonPhrase,
-                    message: err.message
-                });
-            }
+        });
 
-            if(done.length === 0){
-                return res.status(404).send({
-                    codeReason: strings.codes[400][404],
-                    message: strings.errors.devices.noDataFound
-                });
-            }
-
-            res.status(200).send({
-                data: done
+        if(rooms.length === 0){
+            return res.status(404).send({
+                codeReason: strings.codes[400][404],
+                message: strings.errors.devices.noDataFound
             });
-        }).populate(populateFields);
+        }
+
+        var devices = await Devices.find(
+            {
+                'status': status,
+                'idBuilding': idBuilding
+            }).populate(populateFields);
+
+        if(devices.length === 0){
+            return res.status(404).send({
+                codeReason: strings.codes[400][404],
+                message: strings.errors.devices.noDataFound
+            });
+        }
+
+        rooms.forEach(room => {
+
+            var deviceList = [];
+
+            devices.forEach(device => {
+                if(room._id.toString() == device.idRoom._id.toString()){
+                    deviceList.push({
+                        'value': device.value,
+                        'status': device.status,
+                        'createdAt': device.createdAt,
+                        '_id': device._id,
+                        'idBuilding': device.idBuilding,
+                        'idTypeDevice': device.idTypeDevice,
+                        'name': device.name
+                    });
+                }
+            });
+
+            roomList.push({
+                'room': room,
+                'devices': deviceList
+            })
+        });
+
+        res.status(200).send({
+            data: roomList
+        });
+
+        // },
+        // (err, done) => {
+        //     if(err){
+        //         return res.status(500).send({
+        //             codeReason: strings.codes[500].reasonPhrase,
+        //             message: err.message
+        //         });
+        //     }
+
+        //     if(done.length === 0){
+        //         return res.status(404).send({
+        //             codeReason: strings.codes[400][404],
+        //             message: strings.errors.devices.noDataFound
+        //         });
+        //     }
+
+        //     res.status(200).send({
+        //         data: done
+        //     });
+        // }).populate(populateFields);
     } catch (err) {
         res.status(500).send({
             codeReason: strings.codes[500].reasonPhrase,
