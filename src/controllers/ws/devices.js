@@ -105,11 +105,20 @@ async function getDevicesByBuilding(req, res){
                 }
             });
 
-            roomList.push({
-                'room': room,
-                'devices': deviceList
-            })
+            if(deviceList.length > 0){
+                roomList.push({
+                    'room': room,
+                    'devices': deviceList
+                })
+            }
         });
+
+        if(roomList.length == 0){
+            return res.status(404).send({
+                codeReason: strings.codes[400][404],
+                message: strings.errors.devices.noDataFound
+            });
+        }
 
         res.status(200).send({
             data: roomList
