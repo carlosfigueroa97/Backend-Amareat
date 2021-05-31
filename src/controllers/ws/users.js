@@ -197,7 +197,8 @@ async function signIn(req, res){
             }
 
             res.status(200).send({
-                token: token
+                token: token,
+                isAdmin: done.isAdmin
             });
         });
     } catch (err) {
