@@ -100,6 +100,7 @@ async function getDevicesByBuilding(req, res){
                         '_id': device._id,
                         'idBuilding': device.idBuilding,
                         'idTypeDevice': device.idTypeDevice,
+                        'idRoom': device.idRoom._id,
                         'name': device.name
                     });
                 }
