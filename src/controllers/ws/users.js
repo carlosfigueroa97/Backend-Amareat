@@ -408,6 +408,38 @@ async function searchUser(req, res){
     } 
 }
 
+async function getProfileUser(req, res){
+    try {
+        let select = ['status', 'isAdmin', 'createdAt', '_id', 'username', 'email'];
+
+        await Users.findOne({
+            '_id': req.user._id
+        }, 
+        (err, done) => {
+            if(err){
+                return res.status(500).send({
+                    codeReason: strings.codes[500].reasonPhrase,
+                    message: err.message
+                });
+            }
+
+            if(!done){
+                return res.status(404).send({
+                    codeReason: strings.codes[400][404],
+                    message: strings.errors.users.userDoNotExists
+                });
+            }
+
+            res.status(200).send(done)
+        }).select(select);
+    } catch (err) {
+        res.status(500).send({
+            codeReason: strings.codes[500].reasonPhrase,
+            message: err.message
+        });
+    }
+}
+
 module.exports = {
     saveUser,
     checkTokenInDB,
@@ -417,5 +449,6 @@ module.exports = {
     getUsers,
     getUser,
     editUser,
-    searchUser
+    searchUser,
+    getProfileUser
 };
