@@ -190,7 +190,7 @@ async function getDevice(req, res){
             return res.status(400).send({
                 codeReason: strings.codes[400].reasonPhrase,
                 message: strings.errors.devices.fieldsCannotBeNull
-            })
+            });
         }
 
         await Devices.findOne({

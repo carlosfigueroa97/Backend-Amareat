@@ -12,5 +12,7 @@ module.exports = {
     DEV_PASS: process.env.DEV_PASS,
     SECRET_CRYPTO: process.env.SECRET_CRYPTO,
     IV: process.env.IV,
-    ALGORITHM: process.env.ALGORITHM
+    ALGORITHM: process.env.ALGORITHM,
+    USERNAME_ARDUINO: process.env.USERNAME_ARDUINO,
+    PASSWORD_ARDUINO: process.env.PASSWORD_ARDUINO
 };
