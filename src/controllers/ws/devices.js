@@ -322,6 +322,88 @@ async function socketGetDevicesByRoom(idRoom, status){
     }
 }
 
+async function socketGetDevicesByBuilding(idBuilding, status){
+    try {
+        let populateFields = ['idTypeDevice', 'idRoom'];
+        let roomList = [];
+
+        if(!status || !idBuilding){
+            return {
+                codeReason: strings.codes[400].reasonPhrase,
+                message: strings.errors.devices.fieldsCannotBeNull
+            }
+        }
+
+        var rooms = await Rooms.find({
+            'status': status,
+            'idBuilding': idBuilding
+        });
+
+        if(rooms.length === 0){
+            return {
+                codeReason: strings.codes[400][404],
+                message: strings.errors.devices.noDataFound
+            }
+        }
+
+        var devices = await Devices.find(
+            {
+                'status': status,
+                'idBuilding': idBuilding
+            }).populate(populateFields);
+
+        if(devices.length === 0){
+            return {
+                codeReason: strings.codes[400][404],
+                message: strings.errors.devices.noDataFound
+            }
+        }
+
+        rooms.forEach(room => {
+
+            var deviceList = [];
+
+            devices.forEach(device => {
+                if(room._id.toString() == device.idRoom._id.toString()){
+                    deviceList.push({
+                        'value': device.value,
+                        'status': device.status,
+                        'createdAt': device.createdAt,
+                        '_id': device._id,
+                        'idBuilding': device.idBuilding,
+                        'idTypeDevice': device.idTypeDevice,
+                        'idRoom': device.idRoom._id,
+                        'name': device.name
+                    });
+                }
+            });
+
+            if(deviceList.length > 0){
+                roomList.push({
+                    'room': room,
+                    'devices': deviceList
+                })
+            }
+        });
+
+        if(roomList.length == 0){
+            return {
+                codeReason: strings.codes[400][404],
+                message: strings.errors.devices.noDataFound
+            }
+        }
+
+        return {
+            data: roomList
+        }
+    } catch (err) {
+        return {
+            codeReason: strings.codes[500].reasonPhrase,
+            message: err.message
+        }
+    }
+}
+
 module.exports = {
     getDevices,
     saveDevice,
@@ -329,5 +411,6 @@ module.exports = {
     editDevice,
     getDevicesByBuilding,
     getDevicesByRoom,
-    socketGetDevicesByRoom
+    socketGetDevicesByRoom,
+    socketGetDevicesByBuilding
 }

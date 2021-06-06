@@ -22,6 +22,7 @@ const io = SocktIO(server);
 
 var devices = require('./src/sockets/devices')
 devices.getDevicesByRoom(io);
+devices.getDevicesByBuildings(io);
 
 server.listen(app.get('port'), function () {
     console.log(`${strings.server.connection.successfull}: ${app.get('port')}`);
