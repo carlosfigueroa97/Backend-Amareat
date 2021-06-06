@@ -297,11 +297,37 @@ async function getDevicesByRoom(req, res){
     }
 }
 
+async function socketGetDevicesByRoom(idRoom, status){
+    try {
+        var response = await Devices.find({
+            'status': status,
+            'idRoom': idRoom
+        });
+
+        if(response.length == 0 || !response){
+            return {
+                codeReason: strings.codes[400][404],
+                message: strings.errors.devices.noDataFound
+            }
+        }
+
+        return {
+            data: response
+        }
+    } catch (err) {
+        return {
+            codeReason: strings.codes[500].reasonPhrase,
+            message: err.message
+        }
+    }
+}
+
 module.exports = {
     getDevices,
     saveDevice,
     getDevice,
     editDevice,
     getDevicesByBuilding,
-    getDevicesByRoom
+    getDevicesByRoom,
+    socketGetDevicesByRoom
 }

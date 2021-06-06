@@ -14,12 +14,25 @@ const { PORT } = require('./src/config/config');
 // Initialize database
 require('./src/config/database');
 
-// Initialize server
-app.listen(PORT, (err) => {
-    if(err){
-        console.log(`${strings.server.connection.error}}: ${err}`);
-    }
-    else{
-        console.log(`${strings.server.connection.successfull}: ${PORT}`);
-    }
+const http = require('http');
+const server = http.createServer(app);
+
+const SocktIO = require('socket.io');
+const io = SocktIO(server);
+
+var devices = require('./src/sockets/devices')
+devices.getDevicesByRoom(io);
+
+server.listen(app.get('port'), function () {
+    console.log(`${strings.server.connection.successfull}: ${app.get('port')}`);
 });
+
+// Initialize server
+// app.listen(PORT, (err) => {
+//     if(err){
+//         console.log(`${strings.server.connection.error}}: ${err}`);
+//     }
+//     else{
+//         console.log(`${strings.server.connection.successfull}: ${PORT}`);
+//     }
+// });
