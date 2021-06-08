@@ -326,7 +326,7 @@ async function socketGetDevicesByBuilding(idBuilding, status){
     try {
         let populateFields = ['idTypeDevice', 'idRoom'];
         let roomList = [];
-
+        
         if(!status || !idBuilding){
             return {
                 codeReason: strings.codes[400].reasonPhrase,

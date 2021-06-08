@@ -35,10 +35,10 @@ function getDevicesByBuildings(io){
 
         try {
             socket.on('client data buildings', async (data) => {
-                console.log('Recibido: ' + data)
-                var idBuilding = data.idBuilding;
-                var status = data.status;
-
+                var obj = JSON.parse(data)
+                console.log('Recibido: ' + obj)
+                var idBuilding = obj.idBuilding;
+                var status = obj.status;
 
                 while(true){
                     var response = await ctrl.socketGetDevicesByBuilding(idBuilding, status);
