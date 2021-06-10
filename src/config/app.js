@@ -23,5 +23,6 @@ app.set('port', config.PORT);
 
 // Init WS
 endpoints.initWS(app);
+endpoints.initSwagger(app);
 
 module.exports = app;
