@@ -13,6 +13,6 @@ router.get('/arduino/getDevicesByRoom', auth.isAuthArduino, ctrl.getDevicesByRoo
 
 router.post('/saveDevice', auth.isAuth, auth.isAdmin, ctrl.saveDevice);
 
-router.put('/editDevice', auth.isAuth, auth.isAdmin, ctrl.editDevice);
+router.put('/editDevice', auth.isAuth, ctrl.editDevice);
 
 module.exports = router;
