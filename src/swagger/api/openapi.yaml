@@ -1,0 +1,817 @@
+openapi: 3.0.0
+info:
+  title: AMAREAT DEVELOPERS API
+  description: This is a simple API
+  contact:
+    email: 15460779@colima.tecnm.mx
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: https://amareat-dev.herokuapp.com/app/api/v1/
+  description: This is a simple API by AMAREAT
+- url: https://virtserver.swaggerhub.com/amareat/amareat-ecohelper/1.0.0
+  description: SwaggerHub API Auto Mocking
+tags:
+- name: Users
+  description: Users calls
+- name: Buildings
+  description: Building calls
+- name: Rooms
+  description: Room calls
+- name: Devices
+  description: Devices calls
+- name: Type Devices
+  description: Type Devices calls
+- name: History
+  description: History calls
+paths:
+  /users/saveUser:
+    post:
+      tags:
+      - Users
+      summary: Save a new user in the database (only admins)
+      description: You can  save a new user in the database. This endpoint only used
+        by administrators of the application. The password must be encrypted for the
+        algorithm aes256
+      operationId: usersSaveUserPOST
+      requestBody:
+        description: Body request to save user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/saveUser'
+      responses:
+        "200":
+          description: User saved successfully
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: User no found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Users
+  /users/signIn:
+    post:
+      tags:
+      - Users
+      summary: Sign in
+      description: You can  loggin on the application
+      operationId: usersSignInPOST
+      requestBody:
+        description: Body request to sign in
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/signIn'
+      responses:
+        "200":
+          description: Logged succesfully
+        "404":
+          description: User no found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Users
+  /users/refreshToken:
+    put:
+      tags:
+      - Users
+      summary: Refresh Token
+      description: You can  update the token when it's expired
+      operationId: usersRefreshTokenPUT
+      responses:
+        "200":
+          description: Token updated succesfully
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Users
+  /users/logout:
+    post:
+      tags:
+      - Users
+      summary: Logout
+      description: You can sign out
+      operationId: usersLogoutPOST
+      responses:
+        "200":
+          description: Sign out succesfully
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Users
+  /users/getUser:
+    get:
+      tags:
+      - Users
+      summary: Get a user
+      description: You can get a specific user
+      operationId: usersGetUserGET
+      parameters:
+      - name: _id
+        in: query
+        description: Object ID of the user
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: 609a136d49284a1904e123cf
+      responses:
+        "200":
+          description: Sign out succesfully
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: User no found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Users
+  /users/getUsers:
+    get:
+      tags:
+      - Users
+      summary: Get all users
+      description: You can get all users
+      operationId: usersGetUsersGET
+      responses:
+        "200":
+          description: Sign out succesfully
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: User no found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Users
+  /users/editUser:
+    put:
+      tags:
+      - Users
+      summary: Edit a user (only admins)
+      description: You can  edit a user in the database. This endpoint only used by
+        administrators of the application. The password must be encrypted for the
+        algorithm aes256
+      operationId: usersEditUserPUT
+      requestBody:
+        description: Body request to save user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/editUser'
+      responses:
+        "200":
+          description: Data updated successfully
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: User no found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Users
+  /users/searchUser:
+    get:
+      tags:
+      - Users
+      summary: Search a user
+      description: You can  search a user in the database.
+      operationId: usersSearchUserGET
+      parameters:
+      - name: searchValue
+        in: query
+        description: Search a user by username or email
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: elpel
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: User no found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Users
+  /buildings/saveBuilding:
+    post:
+      tags:
+      - Buildings
+      summary: Save a building
+      description: You can save a building in the database (only admins)
+      operationId: buildingsSaveBuildingPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/saveBuilding'
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: No data found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Buildings
+  /buildings/getBuildings:
+    get:
+      tags:
+      - Buildings
+      summary: Get all buildings
+      description: You can get all buildings in the database
+      operationId: buildingsGetBuildingsGET
+      parameters:
+      - name: status
+        in: query
+        description: Status building
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: "0"
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: No data found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Buildings
+  /buildings/getBuilding:
+    get:
+      tags:
+      - Buildings
+      summary: Get a specific building
+      description: You can get a specific building in the database
+      operationId: buildingsGetBuildingGET
+      parameters:
+      - name: _id
+        in: query
+        description: Object ID
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: 60a1d2445e9e790f3445d1f1
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: No data found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Buildings
+  /buildings/editBuilding:
+    put:
+      tags:
+      - Buildings
+      summary: Edit a building
+      description: You can update a building in the database
+      operationId: buildingsEditBuildingPUT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/editBuilding'
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: No data found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Buildings
+  /buildings/searchBuilding:
+    get:
+      tags:
+      - Buildings
+      summary: Search a building
+      description: You can search a specific building in the database
+      operationId: buildingsSearchBuildingGET
+      parameters:
+      - name: searchValue
+        in: query
+        description: Name
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: Edif
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: No data found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Buildings
+  /rooms/saveRoom:
+    post:
+      tags:
+      - Rooms
+      summary: Save a room
+      description: You can save a room in the database (only admins)
+      operationId: roomsSaveRoomPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/saveRoom'
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: No data found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Rooms
+  /rooms/getRooms:
+    get:
+      tags:
+      - Rooms
+      summary: Get all rooms
+      description: You can get all rooms in the database
+      operationId: roomsGetRoomsGET
+      parameters:
+      - name: status
+        in: query
+        description: Status room
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: "0"
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: No data found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Rooms
+  /rooms/getRoom:
+    get:
+      tags:
+      - Rooms
+      summary: Get a specific room
+      description: You can get a specific room in the database
+      operationId: roomsGetRoomGET
+      parameters:
+      - name: _id
+        in: query
+        description: Object ID
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: 60a46e1cea26651982223f66
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: No data found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Rooms
+  /rooms/editRoom:
+    put:
+      tags:
+      - Rooms
+      summary: Edit a rooms
+      description: You can update a room in the database
+      operationId: roomsEditRoomPUT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/editRoom'
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: No data found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Rooms
+  /devices/saveDevice:
+    post:
+      tags:
+      - Devices
+      summary: Save a device
+      description: You can save a device in the database (only admins)
+      operationId: devicesSaveDevicePOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/saveDevice'
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: No data found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Devices
+  /devices/getDevices:
+    get:
+      tags:
+      - Devices
+      summary: Get all devices
+      description: You can get all devices in the database
+      operationId: devicesGetDevicesGET
+      parameters:
+      - name: status
+        in: query
+        description: Status device
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: "0"
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: No data found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Devices
+  /devices/getDevice:
+    get:
+      tags:
+      - Devices
+      summary: Get a specific device
+      description: You can get a specific device in the database
+      operationId: devicesGetDeviceGET
+      parameters:
+      - name: _id
+        in: query
+        description: Object ID
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: 60a45bcbef845d088887c944
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: No data found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Devices
+  /devices/editDevice:
+    put:
+      tags:
+      - Devices
+      summary: Edit a device
+      description: You can update a device in the database
+      operationId: devicesEditDevicePUT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/editDevice'
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: No data found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: Devices
+  /typeDevices/saveTypeDevice:
+    post:
+      tags:
+      - Type Devices
+      summary: Save a type device
+      description: You can save a type device in the database (only admins)
+      operationId: typeDevicesSaveTypeDevicePOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/saveTypeDevice'
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: No data found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: TypeDevices
+  /typeDevices/getTypeDevices:
+    get:
+      tags:
+      - Type Devices
+      summary: Get all type devices
+      description: You can get all type devices in the database
+      operationId: typeDevicesGetTypeDevicesGET
+      parameters:
+      - name: status
+        in: query
+        description: Status device
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: "0"
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: No data found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: TypeDevices
+  /history/saveHistory:
+    post:
+      tags:
+      - History
+      summary: Save a new history
+      description: You can save a new history in the database
+      operationId: historySaveHistoryPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/saveHistory'
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: No data found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: History
+  /history/getHistory:
+    get:
+      tags:
+      - History
+      summary: Get changes history
+      description: You can get all history
+      operationId: historyGetHistoryGET
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: You need a unique token (You do not have authorization)
+        "404":
+          description: No data found
+        "500":
+          description: An exception has ocurred
+      x-swagger-router-controller: History
+components:
+  schemas:
+    saveUser:
+      required:
+      - email
+      - isAdmin
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+          example: elpelondebrazers
+        password:
+          type: string
+          example: D01114D8CCBA0261F44F45A1471B641C
+        email:
+          type: string
+          example: elpelondebrazes@colima.tecnm.mx
+        isAdmin:
+          type: boolean
+          example: true
+    signIn:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+          example: elpelondebrazers
+        password:
+          type: string
+          example: D01114D8CCBA0261F44F45A1471B641C
+    editUser:
+      required:
+      - email
+      - isAdmin
+      - password
+      - status
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+          example: elpelondebrazers
+        password:
+          type: string
+          example: D01114D8CCBA0261F44F45A1471B641C
+        email:
+          type: string
+          example: elpelondebrazes@colima.tecnm.mx
+        isAdmin:
+          type: boolean
+          example: true
+        status:
+          type: string
+          example: "0"
+    saveBuilding:
+      required:
+      - name
+      - rooms
+      type: object
+      properties:
+        name:
+          type: string
+          example: Edificio A
+        rooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/saveBuilding_rooms'
+    editBuilding:
+      required:
+      - _id
+      - name
+      - status
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 60a1d2445e9e790f3445d1f1
+        name:
+          type: string
+          example: Edificio A
+        status:
+          type: string
+          example: "0"
+    saveRoom:
+      required:
+      - idBuilding
+      - name
+      type: object
+      properties:
+        idBuilding:
+          type: string
+          example: 60afdf57b9054100046bd9ef
+        name:
+          type: string
+          example: Sala B1
+    editRoom:
+      required:
+      - _id
+      - name
+      - status
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 60afdf57b9054100046bd9ef
+        name:
+          type: string
+          example: Sala B1
+        status:
+          type: string
+          example: "0"
+    saveDevice:
+      required:
+      - idBuilding
+      - idRoom
+      - idTypeDevice
+      - name
+      - status
+      - value
+      type: object
+      properties:
+        idBuilding:
+          type: string
+          example: 60be29cae248e60004ce3106
+        idRoom:
+          type: string
+          example: 60be29cae248e60004ce3109
+        idTypeDevice:
+          type: string
+          example: 60a46d389171dc166b909685
+        name:
+          type: string
+          example: Luz jodida
+        value:
+          type: boolean
+          example: false
+        status:
+          type: string
+          example: "0"
+    editDevice:
+      required:
+      - _id
+      - name
+      - status
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 60a46e1cea26651982223f66
+        name:
+          type: string
+          example: Aire Acondicionado
+        status:
+          type: string
+          example: "1"
+    saveTypeDevice:
+      required:
+      - image
+      - name
+      - status
+      type: object
+      properties:
+        name:
+          type: string
+          example: Luz
+        image:
+          type: string
+          example: https://img-premium.flaticon.com/png/512/1100/1100333.png?token=exp=1621389475~hmac=41723fb7cb8187a99b7d0148ce892753
+        status:
+          type: string
+          example: "0"
+    saveHistory:
+      required:
+      - change
+      - idBuilding
+      - idDevice
+      - idRoom
+      - idUser
+      type: object
+      properties:
+        idUser:
+          type: string
+          example: 609a136d49284a1904e123cf
+        idBuilding:
+          type: string
+          example: 60a1d2445e9e790f3445d1f1
+        idRoom:
+          type: string
+          example: 60a1d2445e9e790f3445d1f2
+        idDevice:
+          type: string
+          example: 60a46e1cea26651982223f66
+        change:
+          type: boolean
+          example: true
+    saveBuilding_rooms:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: Sala 1
