@@ -7,7 +7,8 @@ const { status } = require('../helpers/properties');
 const buildingsSchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     status,
     createdAt: {
