@@ -35,12 +35,12 @@ async function saveBuilding(req, res){
                     }
 
                     res.status(200).send({
-                        message: strings.response.buildings.dataSaved
+                        data: done
                     });
                 });
             }else{
                 res.status(200).send({
-                    message: strings.response.buildings.dataSaved
+                    data: done
                 });
             }
         });
